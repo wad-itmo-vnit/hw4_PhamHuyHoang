@@ -8,7 +8,7 @@ def answer(ques):
 
     if ques in ["hi", "hey", "hello", "good morning", "good afternoon"] :
         ans="hi"
-    elif ques in ["who are you", "are you human", "are you bot", "are you human or bot"]:
+    elif ques in ["who are you?", "are you human?", "are you bot?", "are you human or bot?"]:
         ans ="I am just a bot"
     elif ques == "what is your name?":
         ans = "I am nameless. I don't have a name"
