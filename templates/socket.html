@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket</title>
+</head>
+<body>
+
+    <div class="back"><a href="/" style="font-size: 30px;">Back</a></div>
+    <div style="width: 200px; margin: auto;"><h1>BOT CHAT</h1></div>
+
+    <div id="box" style="width: 900px; margin: auto;">
+        <form action="" method="POST" id="user-chat"> 
+            <label for="user">Your Name: </label>
+            <input type="text" id="user" name="user" value="user" size="10">
+            <label for="message">Messsenge:</label>
+            <input type="text" name="message" id="message" size="50">
+            <span></span>
+            <input type="submit" value="Send">
+        </form>
+        
+        <div id="dialog" style="height: 300px;"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script>
+        const socket = io ();
+        let form = document.querySelector('#user-chat');
+        let  dialog = document.querySelector("#dialog");
+
+        function addChat(user, message){
+            let chat = `<p><b>${user}: </b>${message}</p>`;
+            dialog.innerHTML+= chat;
+        }
+
+        socket.on('connect',() => {
+            console.log('connected');
+        })
+
+        socket.on('message', (data) => {
+            addChat(data.user,data.message);
+        })
+      
+        
+        form.onsubmit =(e)=>{
+            e.preventDefault();
+            let user = document.querySelector("#user").value;
+            let message = document.querySelector("#message").value;
+            let data = {
+                'user' : user,
+                'message' : message
+            }
+
+            if(user != '' && message !=''){
+                addChat(user,message);
+                document.querySelector("#message").value='';
+                socket.send(data);                 
+            };
+        };
+
+        function sendAuto(){
+            socket.emit('sendAuto');
+        }
+        setInterval(sendAuto,10000);     
+    </script>
+
+</body>
+</html>
